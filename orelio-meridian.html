@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orelio — The Meridian, Ref. 41</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,ital@9..144,300..600,0..1&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --graphite:#1B1B1D;
+    --graphite-2:#242426;
+    --parchment:#EDE7DA;
+    --parchment-2:#E3DCC9;
+    --bronze:#9C6B3E;
+    --bronze-light:#C79A66;
+    --burgundy:#5B1A1E;
+    --ivory:#F3EEE1;
+    --ink:#26221C;
+    --hairline: rgba(156,107,62,0.28);
+    --hairline-dark: rgba(243,238,225,0.16);
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top,0px);
+    padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top: env(safe-area-inset-top,0px); scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:'Public Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{max-width:100%;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;}
+  .container-scroll{overflow-x:auto;}
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:440;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .tabular{font-variant-numeric: tabular-nums;}
+
+  /* ---------- top bar ---------- */
+  header.top{
+    position:sticky; top:0; z-index:20;
+    top: env(safe-area-inset-top,0px);
+    background:rgba(237,231,218,0.86);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--hairline);
+  }
+  .top-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:1100px; margin:0 auto;
+  }
+  .wordmark{
+    font-family:'Fraunces', serif;
+    font-size:1.25rem;
+    font-weight:500;
+    letter-spacing:0.02em;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .top-spec{
+    font-size:0.8rem; color:var(--bronze); font-weight:500;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:64px 28px 40px;
+    text-align:center;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .dial-stage{
+    width:min(78vw, 360px);
+    aspect-ratio:1/1;
+    margin:0 auto 36px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 5vw, 3.4rem);
+    line-height:1.05;
+    max-width:14ch;
+  }
+  .hero .sub{
+    margin-top:18px;
+    font-size:1.05rem;
+    color:#4a4238;
+    max-width:44ch;
+    line-height:1.55;
+  }
+  .cta-row{
+    margin-top:32px;
+    display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
+  }
+  .btn{
+    font-family:'Public Sans', sans-serif;
+    font-size:0.92rem;
+    font-weight:600;
+    padding:14px 28px;
+    border-radius:2px;
+    text-decoration:none;
+    display:inline-block;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+  .btn-primary{
+    background:var(--graphite);
+    color:var(--ivory);
+    border:1px solid var(--graphite);
+  }
+  .btn-primary:hover{ background:var(--ink); }
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--hairline);
+  }
+  .btn-ghost:hover{ border-color:var(--bronze); color:var(--bronze); }
+
+  /* ---------- spec strip (index marks) ---------- */
+  .strip{
+    border-top:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);
+    padding:22px 0;
+  }
+  .strip-inner{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:18px 32px;
+    max-width:1100px; margin:0 auto; padding:0 28px;
+  }
+  .strip-item{
+    display:flex; align-items:baseline; gap:8px;
+    font-size:0.86rem; color:#4a4238;
+  }
+  .strip-item .tick{
+    width:3px; height:14px; background:var(--bronze); display:inline-block;
+    transform: translateY(1px);
+  }
+  .strip-item b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- section shells ---------- */
+  section{ padding:88px 0; }
+  .section-label{
+    font-size:0.78rem; color:var(--bronze); font-weight:600; margin-bottom:14px;
+  }
+
+  /* ---------- movement split ---------- */
+  .split{
+    display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;
+  }
+  .split p{ line-height:1.7; color:#4a4238; font-size:1rem; margin-top:16px; max-width:46ch;}
+  .split h2{ font-size:clamp(1.6rem,3vw,2.2rem); }
+  .gear-figure{ width:100%; }
+
+  /* ---------- materials ---------- */
+  .materials-row{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:36px;
+  }
+  .material-card{
+    border-top:1px solid var(--hairline);
+    padding-top:22px;
+  }
+  .swatch{
+    width:34px; height:34px; border-radius:50%;
+    margin-bottom:16px;
+    border:1px solid var(--hairline);
+  }
+  .material-card h3{ font-size:1.15rem; font-weight:500; margin-bottom:8px; }
+  .material-card p{ font-size:0.92rem; color:#4a4238; line-height:1.6; margin:0; }
+
+  /* ---------- story / dark ---------- */
+  .story{
+    background:var(--graphite);
+    color:var(--ivory);
+  }
+  .story .wrap{ text-align:center; }
+  .story blockquote{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:340;
+    font-size:clamp(1.4rem,3.4vw,2rem);
+    line-height:1.45;
+    max-width:26ch;
+    margin:0 auto;
+    color:var(--parchment);
+  }
+  .story cite{
+    display:block;
+    margin-top:28px;
+    font-style:normal;
+    font-family:'Public Sans', sans-serif;
+    font-size:0.86rem;
+    color:var(--bronze-light);
+  }
+
+  /* ---------- specs table ---------- */
+  .specs-table{ width:100%; border-collapse:collapse; }
+  .specs-table tr{ border-bottom:1px solid var(--hairline); }
+  .specs-table tr:first-child{ border-top:1px solid var(--hairline); }
+  .specs-table td{ padding:16px 0; font-size:0.95rem; }
+  .specs-table td:first-child{ color:#6b6152; width:42%; }
+  .specs-table td:last-child{ color:var(--ink); font-weight:500; text-align:right; }
+
+  /* ---------- reserve / footer ---------- */
+  .reserve{
+    text-align:center;
+  }
+  .reserve h2{ font-size:clamp(1.8rem,4vw,2.6rem); max-width:16ch; margin:0 auto; }
+  .reserve .sub{ color:#4a4238; margin-top:14px; max-width:42ch; margin-left:auto; margin-right:auto; }
+  form.capture{
+    margin-top:32px;
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+  }
+  form.capture input[type="email"]{
+    font-family:'Public Sans', sans-serif;
+    padding:14px 16px;
+    border:1px solid var(--hairline);
+    background:transparent;
+    min-width:260px;
+    font-size:0.92rem;
+    border-radius:2px;
+  }
+  form.capture input[type="email"]:focus{
+    outline:2px solid var(--bronze);
+    outline-offset:2px;
+  }
+  .fine{ margin-top:16px; font-size:0.78rem; color:#8a7f6c; }
+
+  footer{
+    border-top:1px solid var(--hairline);
+    padding:40px 0;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom,0px));
+  }
+  .footer-inner{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+  }
+  .footer-inner .wordmark{ font-size:1rem; }
+  .footer-links{ display:flex; gap:24px; }
+  .footer-links a{ color:#6b6152; text-decoration:none; font-size:0.85rem; }
+  .footer-links a:hover{ color:var(--bronze); }
+
+  :focus-visible{ outline:2px solid var(--bronze); outline-offset:3px; }
+
+  @media (max-width: 760px){
+    .split{ grid-template-columns:1fr; gap:36px; }
+    .materials-row{ grid-template-columns:1fr; gap:28px; }
+    section{ padding:64px 0; }
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .hand{ transform-origin:180px 180px; animation: sweep 1.8s cubic-bezier(.2,.7,.3,1) 1 both; }
+    .hand-min{ animation-delay:.1s; }
+    .tick-anim{ animation: fadeTick .6s ease both; }
+  }
+  @keyframes sweep{ from{ transform:rotate(-40deg); opacity:0; } to{ transform:rotate(0deg); opacity:1; } }
+  @keyframes fadeTick{ from{ opacity:0; } to{ opacity:1; } }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --parchment:#161513;
+      --parchment-2:#1c1a17;
+      --ink:#EDE7DA;
+    }
+    body{ color:var(--ink); }
+    .top-inner, header.top{ background:rgba(22,21,19,0.86); }
+    .wordmark{ color:var(--ink); }
+    .btn-primary{ background:var(--bronze); border-color:var(--bronze); color:#161513; }
+    .btn-primary:hover{ background:var(--bronze-light); }
+    .btn-ghost{ color:var(--ink); }
+    .strip-item, .split p, .material-card p, .reserve .sub{ color:#c9c0ae; }
+    .specs-table td:first-child{ color:#a89d87; }
+    .specs-table td:last-child{ color:var(--ink); }
+    form.capture input[type="email"]{ color:var(--ink); }
+  }
+  :root[data-theme="dark"]{
+    --parchment:#161513;
+    --parchment-2:#1c1a17;
+    --ink:#EDE7DA;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="wordmark" href="#top">Orelio</a>
+    <span class="top-spec tabular">Ref. 41 &nbsp;·&nbsp; Est. 1958</span>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" style="padding-top:64px;">
+    <div class="dial-stage" aria-hidden="true">
+      <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of the Meridian wristwatch dial">
+        <circle cx="180" cy="180" r="176" fill="var(--graphite)"/>
+        <circle cx="180" cy="180" r="176" fill="none" stroke="var(--bronze)" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="180" cy="180" r="150" fill="var(--graphite-2)"/>
+        <g stroke="var(--parchment)" stroke-width="2" opacity="0.85">
+          <line x1="180" y1="36" x2="180" y2="54" stroke-width="3.5"/>
+          <line x1="180" y1="306" x2="180" y2="324" stroke-width="3.5"/>
+          <line x1="36" y1="180" x2="54" y2="180" stroke-width="3.5"/>
+          <line x1="306" y1="180" x2="324" y2="180" stroke-width="3.5"/>
+        </g>
+        <g stroke="var(--parchment)" stroke-width="1.4" opacity="0.55">
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(30 180 180)"/>
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(60 180 180)"/>
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(120 180 180)"/>
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(150 180 180)"/>
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(210 180 180)"/>
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(240 180 180)"/>
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(300 180 180)"/>
+          <line x1="180" y1="48" x2="180" y2="60" transform="rotate(330 180 180)"/>
+        </g>
+        <text x="180" y="130" text-anchor="middle" font-family="Fraunces, serif" font-size="16" fill="var(--parchment)" letter-spacing="2" opacity="0.9">ORELIO</text>
+        <text x="180" y="148" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="8.5" fill="var(--bronze-light)" letter-spacing="1.5" opacity="0.85">GENEVE</text>
+        <circle cx="180" cy="180" r="30" fill="none" stroke="var(--bronze)" stroke-width="1" opacity="0.5"/>
+        <text x="180" y="215" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="7.5" fill="var(--parchment)" opacity="0.6" letter-spacing="1">AUTOMATIC</text>
+        <line class="hand hand-hr" x1="180" y1="180" x2="180" y2="116" stroke="var(--parchment)" stroke-width="4.5" stroke-linecap="round" transform="rotate(50 180 180)"/>
+        <line class="hand hand-min" x1="180" y1="180" x2="180" y2="80" stroke="var(--parchment)" stroke-width="3" stroke-linecap="round" transform="rotate(160 180 180)"/>
+        <line x1="180" y1="180" x2="180" y2="104" stroke="var(--bronze)" stroke-width="1.5" stroke-linecap="round" transform="rotate(260 180 180)"/>
+        <circle cx="180" cy="180" r="5" fill="var(--bronze)"/>
+        <circle cx="180" cy="180" r="176" fill="none" stroke="var(--bronze)" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <h1>The Meridian, Reference 41</h1>
+    <p class="sub">An in‑house automatic movement, a case machined from a single billet of 316L steel, and a dial finished by hand in our Geneva atelier. Built to be worn for decades, not seasons.</p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#reserve">Reserve yours — €8,400</a>
+      <a class="btn btn-ghost" href="#movement">Explore the movement</a>
+    </div>
+  </section>
+
+  <!-- SPEC STRIP -->
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="strip-item tick-anim"><span class="tick"></span><b>41mm</b>&nbsp;case</div>
+      <div class="strip-item tick-anim" style="animation-delay:.05s"><span class="tick"></span><b>72h</b>&nbsp;power reserve</div>
+      <div class="strip-item tick-anim" style="animation-delay:.1s"><span class="tick"></span><b>100m</b>&nbsp;water resistance</div>
+      <div class="strip-item tick-anim" style="animation-delay:.15s"><span class="tick"></span><b>Sapphire</b>&nbsp;crystal, both faces</div>
+      <div class="strip-item tick-anim" style="animation-delay:.2s"><span class="tick"></span><b>5-year</b>&nbsp;movement warranty</div>
+    </div>
+  </div>
+
+  <!-- MOVEMENT -->
+  <section id="movement">
+    <div class="wrap split">
+      <div>
+        <div class="section-label">Calibre O‑12</div>
+        <h2>A movement we build, not buy.</h2>
+        <p>Most watches at this price carry an outsourced movement finished to look proprietary. Ours isn't. Calibre O‑12 is designed, machined, and regulated in our own workshop — 187 components, hand-bevelled bridges, and a free-sprung balance that holds ‑2/+4 seconds a day, tested over fifteen positions before it ever reaches a case.</p>
+        <p>You can watch it work: the case back is open, and the rotor is engraved with the coordinates of our workshop.</p>
+      </div>
+      <svg class="gear-figure" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Line illustration of interlocking watch movement gears">
+        <g fill="none" stroke="var(--ink)" opacity="0.75" stroke-width="1.2">
+          <circle cx="150" cy="150" r="72"/>
+          <circle cx="150" cy="150" r="8" fill="var(--ink)" opacity="0.75"/>
+          <circle cx="268" cy="130" r="44"/>
+          <circle cx="268" cy="130" r="6" fill="var(--ink)" opacity="0.75"/>
+          <circle cx="230" cy="240" r="30"/>
+          <circle cx="230" cy="240" r="5" fill="var(--ink)" opacity="0.75"/>
+        </g>
+        <g stroke="var(--bronze)" stroke-width="1" opacity="0.6">
+          <path d="M150 78 L150 66 M150 222 L150 234 M78 150 L66 150 M222 150 L234 150" stroke-linecap="round"/>
+          <path d="M198 108 L206 100 M102 192 L94 200" stroke-linecap="round"/>
+        </g>
+        <g fill="var(--ink)" opacity="0.5">
+          <circle cx="150" cy="78" r="2.4"/><circle cx="150" cy="222" r="2.4"/>
+          <circle cx="78" cy="150" r="2.4"/><circle cx="222" cy="150" r="2.4"/>
+          <circle cx="268" cy="86" r="2"/><circle cx="268" cy="174" r="2"/>
+          <circle cx="230" cy="210" r="1.8"/><circle cx="230" cy="270" r="1.8"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- MATERIALS -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">Materials</div>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem); margin-bottom:40px;">What it's made from, and why.</h2>
+      <div class="materials-row">
+        <div class="material-card">
+          <div class="swatch" style="background:linear-gradient(135deg,#c9c9cc,#8f9094);"></div>
+          <h3>Case — 316L steel</h3>
+          <p>Machined from a single billet, then hand-polished between brushed lugs so the case catches light only where it should.</p>
+        </div>
+        <div class="material-card">
+          <div class="swatch" style="background:linear-gradient(135deg,#4a4238,#2b271f);"></div>
+          <h3>Strap — chestnut leather</h3>
+          <p>Vegetable-tanned in a family tannery outside Florence, then hand-stitched with waxed saddle thread that darkens with wear.</p>
+        </div>
+        <div class="material-card">
+          <div class="swatch" style="background:linear-gradient(135deg,#eef3f4,#c7d4d6); border:1px solid var(--hairline);"></div>
+          <h3>Crystal — sapphire</h3>
+          <p>Domed and anti-reflective on both faces, hard enough to resist scratching from anything short of another sapphire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="story">
+    <div class="wrap">
+      <blockquote>"We don't design watches to be noticed. We design them to still be running when the noticing has stopped mattering."</blockquote>
+      <cite>— Elin Voss, Head Watchmaker</cite>
+    </div>
+  </section>
+
+  <!-- SPECS TABLE -->
+  <section>
+    <div class="wrap">
+      <div class="section-label">Full specification</div>
+      <table class="specs-table tabular">
+        <tr><td>Movement</td><td>Calibre O‑12, automatic, 187 components</td></tr>
+        <tr><td>Power reserve</td><td>72 hours</td></tr>
+        <tr><td>Accuracy</td><td>‑2 / +4 seconds per day</td></tr>
+        <tr><td>Case diameter</td><td>41mm</td></tr>
+        <tr><td>Case thickness</td><td>10.8mm</td></tr>
+        <tr><td>Water resistance</td><td>100m / 10 ATM</td></tr>
+        <tr><td>Crystal</td><td>Sapphire, double anti-reflective</td></tr>
+        <tr><td>Strap</td><td>Chestnut vegetable-tanned leather, steel pin buckle</td></tr>
+        <tr><td>Warranty</td><td>5 years, movement and case</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- RESERVE -->
+  <section id="reserve" class="reserve">
+    <div class="wrap">
+      <h2>We finish sixty pieces a month.</h2>
+      <p class="sub">Each Meridian is regulated and cased by one watchmaker, start to finish. Leave your email and we'll let you know when the next allocation opens.</p>
+      <form class="capture" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Noted — we\'ll be in touch';">
+        <input type="email" placeholder="you@email.com" aria-label="Email address" required>
+        <button type="submit" class="btn btn-primary">Join the list</button>
+      </form>
+      <p class="fine">No spam. One email, only when a new allocation is ready.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <a class="wordmark" href="#top">Orelio</a>
+    <div class="footer-links">
+      <a href="#movement">Movement</a>
+      <a href="#reserve">Reserve</a>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
